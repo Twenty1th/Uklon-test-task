@@ -1,7 +1,6 @@
 import time
 
 from prometheus_client import Counter, Gauge
-from domain.entities import DriverId
 
 
 api_start_time = Gauge(
@@ -22,10 +21,11 @@ speed_violations = Counter(
 )
 altitude_anomalies = Counter(
     "altitude_anomalies",
-    "Total number of altitude_limit anomalies"
+    "Total number of altitude anomalies"
 )
 db_writes = Counter(
-    "db_writes", "Total number of writes to the database"
+    "db_writes",
+    "Total number of writes to the database"
 )
 
 

@@ -1,6 +1,7 @@
 import logging
 from typing import Type
 
+import sqlalchemy
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from adapters.metrics.api.prometheus import received_coordinates, \
@@ -17,10 +18,9 @@ class SaveDriverInfoUseCase:
         self._session = session
 
     async def execute(self, driver_info: DriverInfo) -> int:
-
-        async with self._session.begin():
-            repository = self._repository(session=self._session)
-            try:
+        try:
+            async with self._session.begin():
+                repository = self._repository(session=self._session)
                 last_driver_info = await repository.get(driver_info.driver_id)
                 if not driver_info.is_valid_speed():
                     logging.info(
@@ -48,8 +48,12 @@ class SaveDriverInfoUseCase:
                 unique_drivers_ids = await repository.get_unique_driver_ids()
                 unique_drivers.set(unique_drivers_ids)
                 await self._session.commit()
+                logging.info(f"Driver {driver_info.driver_id} info successfully saved {record_id=}")  # noqa E501
                 return record_id
 
-            except Exception as e:
-                await self._session.rollback()
-                raise e
+        except (sqlalchemy.exc.InterfaceError, ConnectionError):
+            raise ConnectionError
+
+        except Exception as e:
+            await self._session.rollback()
+            raise e

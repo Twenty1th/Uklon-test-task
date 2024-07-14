@@ -16,10 +16,8 @@ class Settings(BaseSettings):
         with open(path, "r") as f:
             settings = ujson.load(f)
             return cls(
-                latitude_limit=settings["latitude_limit"],
-                longitude_limit=settings["longitude_limit"],
                 speed_limit=settings["speed_limit"],
-                altitude=settings["altitude_limit"],
+                altitude_limit=settings["altitude_limit"],
             )
 
 
