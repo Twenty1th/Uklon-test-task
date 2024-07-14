@@ -4,9 +4,11 @@ __all__ = [
 
 from fastapi import APIRouter
 from .healthcheck import router as healthcheck_router
+from .metrics import router as metrics_router
 
 monitoring_router = APIRouter(
-    prefix="",
+    tags=['Monitoring'],
 )
 
 monitoring_router.include_router(healthcheck_router)
+monitoring_router.include_router(metrics_router)

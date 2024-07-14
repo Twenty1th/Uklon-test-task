@@ -1,4 +1,5 @@
 import logging
+import time
 from contextlib import asynccontextmanager
 
 import uvicorn
@@ -8,6 +9,7 @@ from starlette.responses import JSONResponse
 from adapters.repository.postgresql import ENGINE
 from application.api import api_router
 from application.monitoring import monitoring_router
+from adapters.metrics.api.prometheus import api_start_time
 from domain.repository.models import Base
 from logger import setup_logger
 from settings import load_settings, CONFIG
@@ -22,6 +24,7 @@ load_settings()
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
+    api_start_time.set(time.time())
     async with ENGINE.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield

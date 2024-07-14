@@ -22,14 +22,16 @@ class DistanceCalculator:
         self.driver_cur_pos = driver_cur_pos
         self.time_elapsed = time_elapsed
 
-    def calculate_horizontal_distance(self, lat, lon, alt):
+    def calculate_horizontal_distance(
+            self, lat: float, lon: float, alt: float
+    ) -> (float, float, float):
         lat, lon = radians(lat), radians(lon)
         x = (self.R + alt / 1000.0) * cos(lat) * cos(lon)
         y = (self.R + alt / 1000.0) * cos(lat) * sin(lon)
         z = (self.R + alt / 1000.0) * sin(lat)
         return x, y, z
 
-    def calculate_3d_distance(self):
+    def calculate_3d_distance(self) -> (float, float, float):
         x1, y1, z1 = self.calculate_horizontal_distance(
             self.driver_last_pos.latitude,
             self.driver_last_pos.longitude,

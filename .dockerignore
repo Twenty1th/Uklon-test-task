@@ -23,7 +23,7 @@
 **/bin
 **/charts
 **/docker-compose*
-build/compose.yaml
+build/docker-compose.yaml
 build/Dockerfile
 **/node_modules
 **/npm-debug.log

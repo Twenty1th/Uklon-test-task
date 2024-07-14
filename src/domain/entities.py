@@ -19,21 +19,13 @@ class DriverInfo(BaseModel):
         alias="created_at",
         default_factory=lambda: int(time.time()),
     )
-    is_correct: bool = Field(
-        default=False,
-    )
+    is_correct: bool = Field(default=False)
 
-    def is_valid(self) -> bool:
-        if any([
-            settings.CONFIG.speed_limit < self.driver_speed,
-            self.driver_speed < 0,
-            self.driver_pos.altitude < 0,
-            settings.CONFIG.longitude_limit < self.driver_pos.longitude,
-        ]):
-            logging.info(f"Incorrect driver data {self}")
-            return False
+    def is_valid_speed(self):
+        return 0 < self.driver_speed < settings.CONFIG.speed_limit
 
-        return True
+    def is_valid_altitude(self) -> bool:
+        return 0 < self.driver_pos.altitude < settings.CONFIG.altitude_limit
 
     def is_valid_distance(self, last_pos: DriverInfo) -> bool:
         calculator = DistanceCalculator(
@@ -44,11 +36,7 @@ class DriverInfo(BaseModel):
         distance = calculator.calculate_3d_distance()
         average_speed = calculator.calculate_average_speed(distance)
         logging.debug(f'[Driver {self.driver_id}] average speed : {average_speed:.2f} км/ч"')  # noqa: E501
-        if settings.CONFIG.speed_limit < average_speed:
-            logging.info(
-                f"Incorrect driver speed {average_speed} > {settings.CONFIG.speed_limit}")  # noqa: E501
-            return False
-        return True
+        return average_speed < settings.CONFIG.speed_limit
 
 
 class DriverPos(BaseModel):

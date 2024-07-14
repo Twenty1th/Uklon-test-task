@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from adapters.repository.postgresql import get_session
 
 router = APIRouter(
-    prefix="/health-check",
+    prefix="/healthcheck",
 )
 
 
@@ -26,4 +26,3 @@ async def healthcheck(
     except (sqlalchemy.exc.InterfaceError, ConnectionRefusedError):
         logging.error("Failed to connect to database")
         return JSONResponse({"status": "error"}, status_code=500)
-
