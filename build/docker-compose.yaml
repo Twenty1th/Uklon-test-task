@@ -1,29 +1,43 @@
-
 services:
   api:
-    build:
-      context: ..
+    image: uklon-api-server
+    container_name: api-server
+
     ports:
-      - 8000:8000
+      - "8000:8000"
+
     depends_on:
       - db
 
+    volumes:
+      - type: bind
+        source: ../src/settings.json
+        target: /app/settings.json
+
+    command:
+      - app.py
+
+  randomizer:
+    image: uklon-api-server
+    container_name: randomizer-server
+    depends_on:
+      - api
+
+    command:
+      - randomizer.py
+
   db:
-     image: postgres:16
-     restart: always
-     user: postgres
-     secrets:
-       - db-password
-     volumes:
-       - db-data:/var/lib/postgresql/data
-     environment:
-       - POSTGRES_DB=uklon
-       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-     expose:
-       - 5432
-     healthcheck:
-       test: [ "CMD", "pg_isready" ]
-       interval: 10s
-       timeout: 5s
-       retries: 5
+    image: postgres:16
+    container_name: uklon-psql
+    restart: always
+    user: postgres
+    environment:
+      - POSTGRES_PASSWORD=password
+    expose:
+      - 5432
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 

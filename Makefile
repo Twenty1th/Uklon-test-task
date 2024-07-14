@@ -1,18 +1,27 @@
-build:
-	docker-compose -f build/Dockefile build
+build-image:
+	docker build -f build/Dockerfile -t uklon-api-server .
 
 run:
 	docker-compose -f build/docker-compose.yaml up -d
 
-stop_db:
+stop:
+	docker-compose -f build/docker-compose.yaml stop
+
+api-logs:
+	docker logs -f --tail 100 api-server
+
+randomizer-logs:
+	docker logs -f --tail 100 randomizer-server
+
+stop-db:
 	docker-compose -f build/docker-compose.yaml stop db
 
-start_db:
+start-db:
 	docker-compose -f build/docker-compose.yaml start db
 
-restart_api:
+restart-api:
 	docker-compose -f build/docker-compose.yaml stop api
 	docker-compose -f build/docker-compose.yaml up -d api
 
-stop_api:
+stop-api:
 	docker-compose -f build/docker-compose.yaml stop server

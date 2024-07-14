@@ -25,6 +25,10 @@ class DistanceCalculator:
     def calculate_horizontal_distance(
             self, lat: float, lon: float, alt: float
     ) -> (float, float, float):
+        """ I sometimes have an error with dividing a floating point number by zero,
+        but I don't have time to fix it.
+        In this regard, there are discrepancies in metrics between entries in the database and coordinates. TODO
+        """
         lat, lon = radians(lat), radians(lon)
         x = (self.R + alt / 1000.0) * cos(lat) * cos(lon)
         y = (self.R + alt / 1000.0) * cos(lat) * sin(lon)

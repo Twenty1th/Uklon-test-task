@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import insert, select, distinct, func
+from sqlalchemy import insert, select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from domain.entities import DriverInfo, DriverPos
@@ -51,7 +51,7 @@ class DriversRepository(ABCDriversRepository):
                 is_correct=res.is_correct,
             )
 
-    async def get_unique_driver_ids(self) -> list[DriverInfo]:
-        stmt = select(func. count(DriverInfoModel.driver_id. distinct()))
+    async def get_unique_driver_ids(self) -> int:
+        stmt = select(func.count(DriverInfoModel.driver_id.distinct()))
         res = await self._session.execute(stmt)
         return res.scalar()

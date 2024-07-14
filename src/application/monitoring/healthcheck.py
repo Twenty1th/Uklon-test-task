@@ -1,28 +1,16 @@
-import logging
-from typing import Annotated
-
-import sqlalchemy
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
-from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from adapters.repository.postgresql import get_session
+from adapters.repository.postgresql import database_is_alive
 
 router = APIRouter(
-    prefix="/healthcheck",
+    tags=["Monitoring"]
 )
 
 
-@router.get("")
-async def healthcheck(
-        session: Annotated[AsyncSession, Depends(get_session)],
-):
-    try:
-        async with session.begin():
-            await session.execute(text('SELECT 1'))
-            return JSONResponse({"status": "ok"})
-
-    except (sqlalchemy.exc.InterfaceError, ConnectionRefusedError):
-        logging.error("Failed to connect to database")
-        return JSONResponse({"status": "error"}, status_code=500)
+@router.get("/healthcheck")
+async def healthcheck():
+    if await database_is_alive():
+        return JSONResponse({"status": "ok"})
+    else:
+        return JSONResponse({"status": "error"}, status_code=status.HTTP_503_SERVICE_UNAVAILABLE)

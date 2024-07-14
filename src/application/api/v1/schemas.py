@@ -15,8 +15,14 @@ class DriverInfoIn(BaseModel):
 class SaveDriverInfoResponse(BaseModel):
     record_id: Optional[int]
     driver_id: DriverId
-    status_code: int
-    msg: str
+    status_code: int = 201
+    msg: str = "Driver info successfully saved"
+
+
+class DriverInfoAcceptedResponse(BaseModel):
+    driver_id: DriverId
+    status_code: int = 202
+    msg: str = "Driver information will be saved later"
 
 
 class ServerErrorResponse(HTTPException):
@@ -27,4 +33,3 @@ class ServerErrorResponse(HTTPException):
             status_code=self.status_code,
             detail={"err": detail}
         )
-

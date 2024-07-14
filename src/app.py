@@ -15,7 +15,6 @@ from domain.repository.models import Base
 from logger import setup_logger
 
 setup_logger()
-load_settings("api")
 
 
 ROUTERS = [
@@ -58,9 +57,8 @@ for router in ROUTERS:
 
 if __name__ == '__main__':
     uvicorn.run(
-        "main:app",
+        "app:app",
         host="0.0.0.0",
-        port=8000,
-        reload=True,
+        port=CONFIG.api.port,
         loop="auto"
     )

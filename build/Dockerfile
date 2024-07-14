@@ -24,8 +24,4 @@ USER appuser
 
 COPY src/ .
 
-# Expose the port that the application listens on.
-EXPOSE 8000
-
-# Run the application.
-CMD python main.py
+ENTRYPOINT [ "python" ]
