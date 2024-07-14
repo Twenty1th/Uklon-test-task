@@ -4,20 +4,21 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 from starlette.responses import JSONResponse
+from settings import load_settings, CONFIG
 
 from adapters.repository.postgresql import ENGINE
 from application.api import api_router
 from application.monitoring import monitoring_router
 from domain.repository.models import Base
 from logger import setup_logger
-from settings import load_settings, CONFIG
+
+setup_logger()
+load_settings("api")
+
 
 ROUTERS = [
     api_router, monitoring_router
 ]
-
-setup_logger()
-load_settings()
 
 
 @asynccontextmanager
@@ -58,5 +59,5 @@ if __name__ == '__main__':
         host="0.0.0.0",
         port=8000,
         reload=True,
-        loop="uvloop"
+        loop="auto"
     )

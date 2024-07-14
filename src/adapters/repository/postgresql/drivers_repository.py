@@ -1,12 +1,11 @@
-import logging
 from typing import Optional
 
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from domain.entities import DriverInfo, DriverPos
-from domain.repository.repository import ABCDriversRepository
 from domain.repository.models import DriverInfo as DriverInfoModel
+from domain.repository.repository import ABCDriversRepository
 
 
 class DriversRepository(ABCDriversRepository):

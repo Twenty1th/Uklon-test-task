@@ -1,6 +1,17 @@
 {
-  "latitude_limit": 11110.0,
-  "longitude_limit": 11110.0,
-  "altitude": 111110.0,
-  "speed_limit": 120.0
+  "randomizer": {
+    "drivers_count": 1000,
+    "latitude_start": 49.8397,
+    "longitude_start": 24.0297,
+    "altitude_start": 296.0,
+    "latitude_range": 0.01,
+    "longitude_range": 0.01,
+    "altitude_range": 20.0
+  },
+  "api": {
+    "latitude_limit": 11110.0,
+    "longitude_limit": 11110.0,
+    "altitude_limit": 111110.0,
+    "speed_limit": 120.0
+  }
 }
