@@ -1,11 +1,13 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
+import settings
+
 ENGINE = create_async_engine(
-    "postgresql+asyncpg://postgres:password@127.0.0.1:5433",
-    pool_size=5,
-    echo_pool=False,  # todo
-    echo=False  # todo
+    settings.CONFIG.postgres_url,
+    pool_size=settings.CONFIG.postgres_pool_size,
+    echo_pool=settings.CONFIG.postgres_echo,
+    echo=settings.CONFIG.postgres_echo,
 )
 async_session_factory = sessionmaker(
     bind=ENGINE,
